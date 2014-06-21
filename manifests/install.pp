@@ -9,14 +9,13 @@
 #
 # Copyright 2014 Martin Meinhold, unless otherwise noted.
 #
-class confluence::install($version, $md5, $package_dir, $install_dir, $application_dir, $data_dir, $process) {
-  validate_string($md5)
-  validate_absolute_path($package_dir)
-  validate_absolute_path($install_dir)
-  validate_absolute_path($application_dir)
-  validate_absolute_path($data_dir)
-  validate_string($process)
+class confluence::install inherits confluence {
 
+  $application_dir = $confluence::application_dir
+  $data_dir = $confluence::data_dir
+  $md5 = $confluence::md5
+  $process = $confluence::process
+  $version = $confluence::version
 
   $pid_directory = $::operatingsystem ? {
     default => "/var/run/${process}",
@@ -30,10 +29,13 @@ class confluence::install($version, $md5, $package_dir, $install_dir, $applicati
     ensure        => present,
     digest_string => $md5,
     url           => "http://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-${version}.tar.gz",
-    target        => $install_dir,
-    src_target    => $package_dir,
+    target        => $confluence::install_dir,
+    src_target    => $confluence::package_dir,
     timeout       => 600,
-    require       => [File[$install_dir], File[$package_dir]],
+    require       => [
+      File[$confluence::install_dir],
+      File[$confluence::package_dir],
+    ],
   }
 
   file { $application_dir:

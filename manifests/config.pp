@@ -14,8 +14,10 @@
 #
 # Copyright 2014 Martin Meinhold, unless otherwise noted.
 #
-class confluence::config($application_dir) {
-  validate_absolute_path($application_dir)
+class confluence::config inherits confluence {
+
+  $application_dir = $confluence::application_dir
+  $plugin_startup_timeout = $confluence::plugin_startup_timeout
 
   file { "${application_dir}/conf/server.xml":
     content => template('confluence/server.xml.erb'),
@@ -25,7 +27,6 @@ class confluence::config($application_dir) {
     notify  => Service['confluence'],
   }
 
-  $plugin_startup_timeout = $confluence::plugin_startup_timeout
   file { "${application_dir}/bin/setenv.sh":
     content => template('confluence/setenv.sh.erb'),
     owner   => 'root',

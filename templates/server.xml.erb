@@ -1,0 +1,40 @@
+<%
+    http_address = scope.lookupvar('confluence::http_address').to_s
+    http_address_tag = case http_address
+      when '' then ''
+      when '*' then ''
+      else "address=\"#{http_address}\""
+    end
+    http_port = scope.lookupvar('confluence::http_port').to_s
+    ajp_address = scope.lookupvar('confluence::ajp_address').to_s
+    ajp_address_tag = case ajp_address
+      when '' then ''
+      when '*' then ''
+      else "address=\"#{ajp_address}\""
+    end
+    ajp_port = scope.lookupvar('confluence::ajp_port').to_s
+    protocols =  scope.lookupvar('confluence::protocols')
+-%>
+<?xml version="1.0" encoding="utf-8"?>
+<Server port="8000" shutdown="SHUTDOWN" debug="0">
+    <Service name="Tomcat-Standalone">
+<% if protocols.include?('http') -%>
+        <Connector className="org.apache.coyote.tomcat4.CoyoteConnector"
+                   <%= http_address_tag %> port="<%= http_port %>"
+                   minProcessors="5" maxProcessors="75"
+                   enableLookups="false" redirectPort="8443" acceptCount="10" debug="0" connectionTimeout="20000"
+                   useURIValidationHack="false" URIEncoding="UTF-8"/>
+<% end -%>
+<% if protocols.include?('ajp') then -%>
+        <Connector <%= ajp_address_tag %> port="<%= ajp_port %>"
+                   URIEncoding="UTF-8" enableLookups="false" redirectPort="8443" protocol="AJP/1.3"/>
+<% end -%>
+        <Engine name="Standalone" defaultHost="localhost" debug="0">
+            <Host name="localhost" debug="0" appBase="webapps" unpackWARs="true" autoDeploy="false">
+                <Context path="" docBase="../confluence" debug="0" reloadable="false" useHttpOnly="true">
+                    <Manager pathname="" />
+                </Context>
+            </Host>
+        </Engine>
+    </Service>
+</Server>

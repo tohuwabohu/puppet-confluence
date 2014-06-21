@@ -53,7 +53,6 @@ class confluence::install inherits confluence {
     owner   => $process,
     group   => $process,
     mode    => '0644',
-    require => User[$process],
   }
 
   file { '/etc/init.d/confluence':

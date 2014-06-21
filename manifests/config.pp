@@ -24,7 +24,6 @@ class confluence::config inherits confluence {
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    notify  => Service['confluence'],
   }
 
   file { "${application_dir}/bin/setenv.sh":
@@ -32,7 +31,6 @@ class confluence::config inherits confluence {
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    notify  => Service['confluence'],
   }
 
   file { "${application_dir}/bin/user.sh":
@@ -40,7 +38,6 @@ class confluence::config inherits confluence {
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    notify  => Service['confluence'],
   }
 
   file { "${application_dir}/confluence/WEB-INF/classes/confluence-init.properties":
@@ -48,6 +45,5 @@ class confluence::config inherits confluence {
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    notify  => Service['confluence'],
   }
 }

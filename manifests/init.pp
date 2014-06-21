@@ -107,7 +107,7 @@ class confluence (
     default => "${install_dir}/atlassian-confluence-${confluence::version}",
   }
 
-  class { 'confluence::package':
+  class { 'confluence::install':
     version         => $confluence::version,
     md5             => $confluence::md5,
     package_dir     => $confluence::package_dir,
@@ -120,7 +120,7 @@ class confluence (
 
   class { 'confluence::config':
     application_dir => $confluence::application_dir,
-    require         => Class['confluence::package'],
+    require         => Class['confluence::install'],
   }
 
   service { 'confluence':
@@ -131,6 +131,6 @@ class confluence (
     restart  => '/etc/init.d/confluence restart',
     stop     => '/etc/init.d/confluence stop',
     status   => '/etc/init.d/confluence status',
-    require  => Class['confluence::package'],
+    require  => Class['confluence::install'],
   }
 }

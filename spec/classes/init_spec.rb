@@ -12,7 +12,7 @@ describe 'confluence' do
     specify { should contain_service('confluence').with_ensure('running').with_enable(true) }
     specify { should contain_file(server_xml).with_content(/protocol="AJP\/1.3"/) }
     specify { should contain_file(server_xml).with_content(/port="8009"/) }
-    specify { should contain_class("confluence::package").with_require('Package[sun-java6-jdk]') }
+    specify { should contain_class("confluence::install").with_require('Package[sun-java6-jdk]') }
   end
 
   describe 'with custom version' do
@@ -91,6 +91,6 @@ describe 'confluence' do
   describe 'depends on custom java package' do
     let(:params) { {:java_package => 'custom-java-jdk'} }
 
-    specify { should contain_class("confluence::package").with_require('Package[custom-java-jdk]') }
+    specify { should contain_class("confluence::install").with_require('Package[custom-java-jdk]') }
   end
 end

@@ -1,4 +1,4 @@
-# = Class: confluence::package
+# = Class: confluence::install
 #
 # Installs the Confluence package and sets up all required directories.
 #
@@ -9,7 +9,7 @@
 #
 # Copyright 2014 Martin Meinhold, unless otherwise noted.
 #
-class confluence::package($version, $md5, $package_dir, $install_dir, $application_dir, $data_dir, $process) {
+class confluence::install($version, $md5, $package_dir, $install_dir, $application_dir, $data_dir, $process) {
   validate_string($md5)
   validate_absolute_path($package_dir)
   validate_absolute_path($install_dir)

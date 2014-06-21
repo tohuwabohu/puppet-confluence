@@ -16,14 +16,12 @@ class confluence::install inherits confluence {
   $md5 = $confluence::md5
   $process = $confluence::process
   $version = $confluence::version
-
-  $pid_directory = $::operatingsystem ? {
-    default => "/var/run/${process}",
-  }
-
-  $pid_file = $::operatingsystem ? {
-    default => "${pid_directory}/${process}.pid",
-  }
+  $pid_file = "${confluence::pid_directory}/${process}.pid"
+  $working_dirs = [
+    "${application_dir}/logs",
+    "${application_dir}/temp",
+    "${application_dir}/work"
+  ]
 
   archive { "atlassian-confluence-${version}":
     ensure        => present,
@@ -46,9 +44,7 @@ class confluence::install inherits confluence {
     require => Archive["atlassian-confluence-${version}"]
   }
 
-  file { ["${application_dir}/logs",
-    "${application_dir}/temp",
-    "${application_dir}/work"]:
+  file { $working_dirs:
     ensure  => directory,
     owner   => $process,
     group   => $process,

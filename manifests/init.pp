@@ -60,28 +60,33 @@
 # Copyright 2014 Martin Meinhold, unless otherwise noted.
 #
 class confluence (
-  $hostname = params_lookup('hostname'),
-  $disable = params_lookup('disable'),
-  $version = params_lookup('version'),
-  $md5 = params_lookup('md5'),
-  $process = params_lookup('process'),
+  $hostname               = params_lookup('hostname'),
+  $disable                = params_lookup('disable'),
+  $version                = params_lookup('version'),
+  $md5                    = params_lookup('md5'),
+  $process                = params_lookup('process'),
 
-  $package_dir = params_lookup('package_dir'),
-  $install_dir = params_lookup('install_dir'),
-  $data_dir = params_lookup('data_dir'),
+  $package_dir            = params_lookup('package_dir'),
+  $install_dir            = params_lookup('install_dir'),
+  $data_dir               = params_lookup('data_dir'),
 
-  $http_address = params_lookup('http_address'),
-  $http_port = params_lookup('http_port'),
-  $ajp_address = params_lookup('ajp_address'),
-  $ajp_port = params_lookup('ajp_port'),
-  $protocols = params_lookup('protocols'),
+  $http_address           = params_lookup('http_address'),
+  $http_port              = params_lookup('http_port'),
+  $ajp_address            = params_lookup('ajp_address'),
+  $ajp_port               = params_lookup('ajp_port'),
+  $protocols              = params_lookup('protocols'),
 
-  $java_opts = params_lookup('java_opts'),
-  $java_package = params_lookup('java_package'),
+  $java_opts              = params_lookup('java_opts'),
+  $java_package           = params_lookup('java_package'),
   $plugin_startup_timeout = params_lookup('plugin_startup_timeout'),
 ) inherits confluence::params {
 
-  validate_string($hostname)
+  if empty($hostname) {
+    fail('Class[Confluence]: hostname must not be empty')
+  }
+  if empty($version) {
+    fail('Class[Confluence]: version must not be empty')
+  }
   $bool_disable = any2bool($disable)
   validate_string($md5)
   validate_string($process)
@@ -91,7 +96,9 @@ class confluence (
   validate_string($http_address)
   validate_string($ajp_address)
   validate_array($protocols)
-  validate_string($java_opts)
+  if empty($java_opts) {
+    fail('Class[Confluence]: java_opts must not be empty')
+  }
 
   $manage_service_ensure = $confluence::bool_disable ? {
     true    => 'stopped',

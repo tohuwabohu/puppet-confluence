@@ -15,10 +15,26 @@ describe 'confluence' do
     specify { should contain_file(server_xml).with_content(/port="8009"/) }
   end
 
-  describe 'with custom version' do
+  describe 'should not accept empty hostname' do
+    let(:params) { {:hostname => ''} }
+
+    specify do
+      expect { should contain_class('confluence') }.to raise_error(Puppet::Error, /hostname/)
+    end
+  end
+
+  describe 'with version => 1.0.0' do
     let(:params) { {:version => '1.0.0'} }
 
     specify { should contain_archive('atlassian-confluence-1.0.0') }
+  end
+
+  describe 'should not accept empty version' do
+    let(:params) { {:version => ''} }
+
+    specify do
+      expect { should contain_class('confluence') }.to raise_error(Puppet::Error, /version/)
+    end
   end
 
   describe 'with disable => true' do
@@ -86,6 +102,14 @@ describe 'confluence' do
     let(:params) { {:java_opts => '-Xms512m -Xmx1024m'} }
 
     specify { should contain_file(setenv_sh).with_content(/-Xms512m -Xmx1024m/) }
+  end
+
+  describe 'should not accept empty java opts' do
+    let(:params) { {:java_opts => ''} }
+
+    specify do
+      expect { should contain_class('confluence') }.to raise_error(Puppet::Error, /java_opts/)
+    end
   end
 
   describe 'depends on custom java package' do

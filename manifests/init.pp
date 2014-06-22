@@ -91,10 +91,10 @@ class confluence (
     fail('Class[Confluence]: service_name must not be empty')
   }
   if !empty($service_uid) and !is_integer($service_uid) {
-    fail("Class[Confluence]: service_uid must be an interger, got '${service_uid}'")
+    fail("Class[Confluence]: service_uid must be an integer, got '${service_uid}'")
   }
   if !empty($service_gid) and !is_integer($service_gid) {
-    fail("Class[Confluence]: service_gid must be an interger, got '${service_gid}'")
+    fail("Class[Confluence]: service_gid must be an integer, got '${service_gid}'")
   }
   if !is_bool($service_disabled) {
     fail("Class[Confluence]: service_disabled must be either true or false, got '${$service_disabled}'")

@@ -79,6 +79,8 @@ class confluence (
   $java_opts              = params_lookup('java_opts'),
   $java_package           = params_lookup('java_package'),
   $plugin_startup_timeout = params_lookup('plugin_startup_timeout'),
+
+  $purge_backups_after    = params_lookup('purge_backups_after')
 ) inherits confluence::params {
 
   if empty($hostname) {
@@ -107,6 +109,9 @@ class confluence (
   validate_array($protocols)
   if empty($java_opts) {
     fail('Class[Confluence]: java_opts must not be empty')
+  }
+  if !empty($purge_backups_after) and !is_integer($purge_backups_after) {
+    fail("Class[Confluence]: purge_backups_after must be an integer, got '${purge_backups_after}'")
   }
 
   $application_dir = "${install_dir}/atlassian-confluence-${confluence::version}"

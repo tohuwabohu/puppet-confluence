@@ -3,6 +3,7 @@ require 'spec_helper'
 describe 'confluence' do
   let(:title) { 'confluence' }
   let(:archive_name) { 'atlassian-confluence-5.3.1' }
+  let(:cron_script) { '/etc/cron.daily/purge-old-confluence-backups' }
   let(:server_xml) { '/opt/atlassian-confluence-5.3.1/conf/server.xml' }
   let(:setenv_sh) { '/opt/atlassian-confluence-5.3.1/bin/setenv.sh' }
   let(:user_sh) { '/opt/atlassian-confluence-5.3.1/bin/user.sh' }
@@ -15,6 +16,7 @@ describe 'confluence' do
     specify { should contain_group('confluence') }
     specify { should contain_service('confluence').with_ensure('running').with_enable(true) }
     specify { should contain_service('confluence').with_require('Package[sun-java6-jdk]') }
+    specify { should contain_file(cron_script).with_ensure('absent') }
     specify { should contain_file(server_xml).with_content(/protocol="AJP\/1.3"/) }
     specify { should contain_file(server_xml).with_content(/port="8009"/) }
     specify { should contain_file(setenv_sh).without_content(/-Datlassian.plugins.enable.wait=/) }
@@ -215,5 +217,27 @@ describe 'confluence' do
     let(:params) { {:java_package => 'custom-java-jdk'} }
 
     specify { should contain_service('confluence').with_require('Package[custom-java-jdk]') }
+  end
+
+  describe 'should not accept invalid purge_backups_after' do
+    let(:params) { {:purge_backups_after => 'invalid'} }
+
+    specify do
+      expect { should contain_class('confluence') }.to raise_error(Puppet::Error, /purge_backups_after/)
+    end
+  end
+
+  describe 'should accept empty purge_backups_after' do
+    let(:params) { {:purge_backups_after => ''} }
+
+    specify { should contain_file(cron_script).with_ensure('absent') }
+  end
+
+  describe 'with purge_backups_after => 7 days' do
+    let(:params) { {:purge_backups_after => 7} }
+
+    specify { should contain_file(cron_script).with_ensure('file') }
+    specify { should contain_file(cron_script).with_content(/\/var\/lib\/confluence\/export\//) }
+    specify { should contain_file(cron_script).with_content(/-mtime \+7/) }
   end
 end

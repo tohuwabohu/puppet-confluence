@@ -23,6 +23,10 @@ class confluence::install inherits confluence {
     "${application_dir}/temp",
     "${application_dir}/work"
   ]
+  $cron_ensure = empty($confluence::purge_backups_after) ? {
+    true    => absent,
+    default => file,
+  }
 
   group { $service_name:
     ensure => present,
@@ -89,5 +93,13 @@ class confluence::install inherits confluence {
     owner  => $service_name,
     group  => $service_name,
     mode   => '0755',
+  }
+
+  file { '/etc/cron.daily/purge-old-confluence-backups':
+    ensure  => $cron_ensure,
+    content => "#!/bin/bash\n/usr/bin/find ${data_dir}/export/ -name \"*.zip\" -type f -mtime +${confluence::purge_backups_after} -delete",
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755'
   }
 }

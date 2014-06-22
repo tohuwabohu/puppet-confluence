@@ -114,8 +114,6 @@ class confluence (
     fail("Class[Confluence]: purge_backups_after must be an integer, got '${purge_backups_after}'")
   }
 
-  $application_dir = "${install_dir}/atlassian-confluence-${confluence::version}"
-
   class { 'confluence::install': } ->
   class { 'confluence::config': } ~>
   class { 'confluence::service': }

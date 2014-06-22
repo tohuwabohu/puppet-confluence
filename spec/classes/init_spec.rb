@@ -3,10 +3,11 @@ require 'spec_helper'
 describe 'confluence' do
   let(:title) { 'confluence' }
   let(:archive_name) { 'atlassian-confluence-5.3.1' }
+  let(:application_dir) { '/opt/atlassian-confluence-5.3.1' }
   let(:cron_script) { '/etc/cron.daily/purge-old-confluence-backups' }
-  let(:server_xml) { '/opt/atlassian-confluence-5.3.1/conf/server.xml' }
-  let(:setenv_sh) { '/opt/atlassian-confluence-5.3.1/bin/setenv.sh' }
-  let(:user_sh) { '/opt/atlassian-confluence-5.3.1/bin/user.sh' }
+  let(:server_xml) { '/opt/atlassian-confluence-current/conf/server.xml' }
+  let(:setenv_sh) { '/opt/atlassian-confluence-current/bin/setenv.sh' }
+  let(:user_sh) { '/opt/atlassian-confluence-current/bin/user.sh' }
 
   describe 'by default' do
     let(:params) { {} }
@@ -16,6 +17,8 @@ describe 'confluence' do
     specify { should contain_group('confluence') }
     specify { should contain_service('confluence').with_ensure('running').with_enable(true) }
     specify { should contain_service('confluence').with_require('Package[sun-java6-jdk]') }
+    specify { should contain_file(application_dir) }
+    specify { should contain_file('/opt/atlassian-confluence-current').with_target(application_dir) }
     specify { should contain_file(cron_script).with_ensure('absent') }
     specify { should contain_file(server_xml).with_content(/protocol="AJP\/1.3"/) }
     specify { should contain_file(server_xml).with_content(/port="8009"/) }

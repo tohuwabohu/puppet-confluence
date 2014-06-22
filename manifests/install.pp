@@ -11,10 +11,15 @@
 #
 class confluence::install inherits confluence {
 
-  $application_dir = $confluence::application_dir
-  $data_dir = $confluence::data_dir
-  $md5sum = $confluence::md5sum
   $version = $confluence::version
+  $archive_name = "atlassian-confluence-${version}"
+  $archive_md5sum = $confluence::md5sum
+  $archive_url = "http://www.atlassian.com/software/confluence/downloads/binary/${archive_name}.tar.gz"
+
+  $application_dir = "${confluence::install_dir}/${archive_name}"
+  $current_dir = "${confluence::install_dir}/atlassian-confluence-current"
+  $data_dir = $confluence::data_dir
+
   $service_name = $confluence::service_name
   $pid_directory = "${confluence::params::run_dir}/${service_name}"
   $pid_file = "${pid_directory}/${service_name}.pid"
@@ -52,10 +57,10 @@ class confluence::install inherits confluence {
     require => User[$service_name],
   }
 
-  archive { "atlassian-confluence-${version}":
+  archive { $archive_name:
     ensure        => present,
-    digest_string => $md5sum,
-    url           => "http://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-${version}.tar.gz",
+    digest_string => $archive_md5sum,
+    url           => $archive_url,
     target        => $confluence::install_dir,
     src_target    => $confluence::package_dir,
     timeout       => 600,
@@ -70,7 +75,12 @@ class confluence::install inherits confluence {
     owner   => root,
     group   => root,
     mode    => '0644',
-    require => Archive["atlassian-confluence-${version}"]
+    require => Archive[$archive_name]
+  }
+
+  file { $current_dir:
+    ensure => link,
+    target => $application_dir,
   }
 
   file { $working_dirs:

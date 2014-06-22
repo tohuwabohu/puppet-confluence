@@ -2,11 +2,6 @@
 #
 # Configures the Confluence installation.
 #
-# = Parameters
-#
-# [*application_dir*]
-#   Sets the application directory.
-#
 # == Author
 #   Martin Meinhold <Martin.Meinhold@gmx.de>
 #

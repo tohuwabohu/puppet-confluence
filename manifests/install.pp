@@ -67,7 +67,7 @@ class confluence::install inherits confluence {
     mode    => '0644',
   }
 
-  file { '/etc/init.d/confluence':
+  file { $confluence::params::service_script:
     ensure  => file,
     content => template('confluence/confluence.erb'),
     owner   => 'root',

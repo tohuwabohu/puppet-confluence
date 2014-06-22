@@ -44,6 +44,6 @@ class confluence::params {
   $service_gid = undef
   $service_disabled = false
   $service_script = $::osfamily ? {
-    default => '/etc/init.d/jira',
+    default => '/etc/init.d/confluence',
   }
 }

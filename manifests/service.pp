@@ -19,15 +19,16 @@ class confluence::service inherits confluence {
     true    => false,
     default => true,
   }
+  $service_script = $confluence::params::service_script
 
   service { $service_name:
     ensure   => $service_ensure,
     enable   => $service_enable,
     provider => base,
-    start    => '/etc/init.d/confluence start',
-    restart  => '/etc/init.d/confluence restart',
-    stop     => '/etc/init.d/confluence stop',
-    status   => '/etc/init.d/confluence status',
+    start    => "${service_script} start",
+    restart  => "${service_script} restart",
+    stop     => "${service_script} stop",
+    status   => "${service_script} status",
     require  => Package[$confluence::java_package],
   }
 }

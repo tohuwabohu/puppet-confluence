@@ -11,11 +11,14 @@ describe 'confluence' do
     let(:params) { {} }
 
     specify { should contain_archive(archive_name) }
+    specify { should contain_user('confluence') }
+    specify { should contain_group('confluence') }
     specify { should contain_service('confluence').with_ensure('running').with_enable(true) }
     specify { should contain_service('confluence').with_require('Package[sun-java6-jdk]') }
     specify { should contain_file(server_xml).with_content(/protocol="AJP\/1.3"/) }
     specify { should contain_file(server_xml).with_content(/port="8009"/) }
-    specify { should contain_file(user_sh) }
+    specify { should contain_file(setenv_sh).without_content(/-Datlassian.plugins.enable.wait=/) }
+    specify { should contain_file(user_sh).with_content(/^CONF_USER="confluence"/) }
   end
 
   describe 'should not accept empty hostname' do

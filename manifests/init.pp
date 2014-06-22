@@ -109,16 +109,6 @@ class confluence (
     fail('Class[Confluence]: java_opts must not be empty')
   }
 
-  $manage_service_ensure = $service_disabled ? {
-    true    => 'stopped',
-    default => 'running',
-  }
-
-  $manage_service_enable = $service_disabled ? {
-    true    => false,
-    default => true,
-  }
-
   $application_dir = "${install_dir}/atlassian-confluence-${confluence::version}"
   $pid_directory = $::operatingsystem ? {
     default => "/var/run/${service_name}",
@@ -126,14 +116,5 @@ class confluence (
 
   class { 'confluence::install': } ->
   class { 'confluence::config': } ~>
-  service { $service_name:
-    ensure   => $manage_service_ensure,
-    enable   => $manage_service_enable,
-    provider => base,
-    start    => '/etc/init.d/confluence start',
-    restart  => '/etc/init.d/confluence restart',
-    stop     => '/etc/init.d/confluence stop',
-    status   => '/etc/init.d/confluence status',
-    require  => Package[$confluence::java_package],
-  }
+  class { 'confluence::service': }
 }

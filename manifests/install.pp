@@ -40,6 +40,14 @@ class confluence::install inherits confluence {
     managehome => true,
   }
 
+  file { $data_dir:
+    ensure  => directory,
+    owner   => $service_name,
+    group   => $service_name,
+    mode    => '0644',
+    require => User[$service_name],
+  }
+
   archive { "atlassian-confluence-${version}":
     ensure        => present,
     digest_string => $md5sum,

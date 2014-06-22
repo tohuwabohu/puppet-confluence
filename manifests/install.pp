@@ -92,14 +92,22 @@ class confluence::install inherits confluence {
     ensure => directory,
     owner  => $service_name,
     group  => $service_name,
-    mode   => '0755',
+    mode   => '0644',
+  }
+
+  file { "${data_dir}/backups":
+    ensure => directory,
+    owner  => $service_name,
+    group  => $service_name,
+    mode   => '0644',
   }
 
   file { '/etc/cron.daily/purge-old-confluence-backups':
     ensure  => $cron_ensure,
-    content => "#!/bin/bash\n/usr/bin/find ${data_dir}/export/ -name \"*.zip\" -type f -mtime +${confluence::purge_backups_after} -delete",
+    content => "#!/bin/bash\n/usr/bin/find ${data_dir}/backups/ -name \"*.zip\" -type f -mtime +${confluence::purge_backups_after} -delete",
     owner   => 'root',
     group   => 'root',
-    mode    => '0755'
+    mode    => '0755',
+    require => File["${data_dir}/backups"],
   }
 }

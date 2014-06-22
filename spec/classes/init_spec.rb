@@ -237,7 +237,7 @@ describe 'confluence' do
     let(:params) { {:purge_backups_after => 7} }
 
     specify { should contain_file(cron_script).with_ensure('file') }
-    specify { should contain_file(cron_script).with_content(/\/var\/lib\/confluence\/export\//) }
+    specify { should contain_file(cron_script).with_content(/\/var\/lib\/confluence\/backups\//) }
     specify { should contain_file(cron_script).with_content(/-mtime \+7/) }
   end
 end

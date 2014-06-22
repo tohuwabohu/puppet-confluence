@@ -16,8 +16,8 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 NAME=confluence
 DESC="Atlassian Confluence"
 PIDFILE=<%= @pid_file %>
-START_SCRIPT=<%= scope.lookupvar('confluence::application_dir') %>/bin/start-confluence.sh
-STOP_SCRIPT=<%= scope.lookupvar('confluence::application_dir') %>/bin/stop-confluence.sh
+START_SCRIPT=<%= @current_dir %>/bin/start-confluence.sh
+STOP_SCRIPT=<%= @current_dir %>/bin/stop-confluence.sh
 
 test -f /lib/lsb/init-functions || exit 1
 . /lib/lsb/init-functions

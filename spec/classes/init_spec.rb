@@ -6,6 +6,7 @@ describe 'confluence' do
   let(:application_dir) { '/opt/atlassian-confluence-5.3.1' }
   let(:cron_script) { '/etc/cron.daily/purge-old-confluence-backups' }
   let(:server_xml) { '/opt/atlassian-confluence-current/conf/server.xml' }
+  let(:service_script) { '/etc/init.d/confluence' }
   let(:setenv_sh) { '/opt/atlassian-confluence-current/bin/setenv.sh' }
   let(:user_sh) { '/opt/atlassian-confluence-current/bin/user.sh' }
 
@@ -24,6 +25,10 @@ describe 'confluence' do
     specify { should contain_file(server_xml).with_content(/port="8009"/) }
     specify { should contain_file(setenv_sh).without_content(/-Datlassian.plugins.enable.wait=/) }
     specify { should contain_file(user_sh).with_content(/^CONF_USER="confluence"/) }
+    specify { should contain_file(service_script).with_content(/^PIDFILE=\/var\/run\/confluence\/confluence.pid$/) }
+    specify { should contain_file(service_script).with_content(/^START_SCRIPT=\/opt\/atlassian-confluence-current\/bin\/start-confluence.sh$/) }
+    specify { should contain_file(service_script).with_content(/^STOP_SCRIPT=\/opt\/atlassian-confluence-current\/bin\/stop-confluence.sh$/) }
+    specify { should contain_file(service_script).with_content(/^cd \/var\/lib\/confluence$/) }
   end
 
   describe 'should not accept empty hostname' do

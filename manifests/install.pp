@@ -13,19 +13,35 @@ class confluence::install inherits confluence {
 
   $application_dir = $confluence::application_dir
   $data_dir = $confluence::data_dir
-  $md5 = $confluence::md5
-  $process = $confluence::process
+  $md5sum = $confluence::md5sum
   $version = $confluence::version
-  $pid_file = "${confluence::pid_directory}/${process}.pid"
+  $service_name = $confluence::service_name
+  $pid_file = "${confluence::pid_directory}/${service_name}.pid"
   $working_dirs = [
     "${application_dir}/logs",
     "${application_dir}/temp",
     "${application_dir}/work"
   ]
 
+  group { $service_name:
+    ensure => present,
+    gid    => $confluence::service_gid,
+    system => true,
+  }
+
+  user { $service_name:
+    ensure     => present,
+    uid        => $confluence::service_uid,
+    gid        => $service_name,
+    home       => $data_dir,
+    shell      => '/bin/false',
+    system     => true,
+    managehome => true,
+  }
+
   archive { "atlassian-confluence-${version}":
     ensure        => present,
-    digest_string => $md5,
+    digest_string => $md5sum,
     url           => "http://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-${version}.tar.gz",
     target        => $confluence::install_dir,
     src_target    => $confluence::package_dir,
@@ -46,8 +62,8 @@ class confluence::install inherits confluence {
 
   file { $working_dirs:
     ensure  => directory,
-    owner   => $process,
-    group   => $process,
+    owner   => $service_name,
+    group   => $service_name,
     mode    => '0644',
   }
 
@@ -61,8 +77,8 @@ class confluence::install inherits confluence {
 
   file { $pid_directory:
     ensure => directory,
-    owner  => $process,
-    group  => $process,
+    owner  => $service_name,
+    group  => $service_name,
     mode   => '0755',
   }
 }

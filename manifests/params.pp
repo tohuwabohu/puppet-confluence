@@ -11,9 +11,9 @@
 #
 class confluence::params {
   $hostname = $::fqdn
+
+  $md5sum = '7959324f3be5c9076dfaa3da59d1349b'
   $version = '5.3.1'
-  $md5 = '7959324f3be5c9076dfaa3da59d1349b'
-  $process = 'confluence'
 
   $http_address = '127.0.0.1'
   $http_port = 8090
@@ -37,5 +37,13 @@ class confluence::params {
 
   $data_dir = $::operatingsystem ? {
     default => '/data/confluence',
+  }
+
+  $service_name = 'confluence'
+  $service_uid = undef
+  $service_gid = undef
+  $service_disabled = false
+  $service_script = $::osfamily ? {
+    default => '/etc/init.d/jira',
   }
 }

@@ -7,17 +7,14 @@
 # [*hostname*]
 #   Sets the hostname of this Confluence instance.
 #
-# [*disable*]
-#   Set to 'true' to disable the service.
-#
 # [*version*]
 #   Sets the version to be installed.
 #
 # [*md5*]
 #   Sets the MD5 checksum of the artifact.
 #
-# [*process*]
-#   Sets the name of the process to be used to run the service.
+# [*service_disabled*]
+#   Set to `true` to disable the service.
 #
 # [*package_dir*]
 #   Sets the directory where the downloaded package is stored.
@@ -61,11 +58,14 @@
 #
 class confluence (
   $hostname               = params_lookup('hostname'),
-  $disable                = params_lookup('disable'),
   $version                = params_lookup('version'),
-  $md5                    = params_lookup('md5'),
-  $process                = params_lookup('process'),
 
+  $service_name           = params_lookup('service_name'),
+  $service_uid            = params_lookup('service_uid'),
+  $service_gid            = params_lookup('service_gid'),
+  $service_disabled       = params_lookup('service_disabled'),
+
+  $md5sum                 = params_lookup('md5sum'),
   $package_dir            = params_lookup('package_dir'),
   $install_dir            = params_lookup('install_dir'),
   $data_dir               = params_lookup('data_dir'),
@@ -87,9 +87,18 @@ class confluence (
   if empty($version) {
     fail('Class[Confluence]: version must not be empty')
   }
-  $bool_disable = any2bool($disable)
-  validate_string($md5)
-  validate_string($process)
+  if empty($service_name) {
+    fail('Class[Confluence]: service_name must not be empty')
+  }
+  if !empty($service_uid) and !is_integer($service_uid) {
+    fail("Class[Confluence]: service_uid must be an interger, got '${service_uid}'")
+  }
+  if !empty($service_gid) and !is_integer($service_gid) {
+    fail("Class[Confluence]: service_gid must be an interger, got '${service_gid}'")
+  }
+  if !is_bool($service_disabled) {
+    fail("Class[Confluence]: service_disabled must be either true or false, got '${$service_disabled}'")
+  }
   validate_absolute_path($package_dir)
   validate_absolute_path($install_dir)
   validate_absolute_path($data_dir)
@@ -100,24 +109,24 @@ class confluence (
     fail('Class[Confluence]: java_opts must not be empty')
   }
 
-  $manage_service_ensure = $confluence::bool_disable ? {
+  $manage_service_ensure = $service_disabled ? {
     true    => 'stopped',
     default => 'running',
   }
 
-  $manage_service_enable = $confluence::bool_disable ? {
+  $manage_service_enable = $service_disabled ? {
     true    => false,
     default => true,
   }
 
   $application_dir = "${install_dir}/atlassian-confluence-${confluence::version}"
   $pid_directory = $::operatingsystem ? {
-    default => "/var/run/${process}",
+    default => "/var/run/${service_name}",
   }
 
   class { 'confluence::install': } ->
   class { 'confluence::config': } ~>
-  service { 'confluence':
+  service { $service_name:
     ensure   => $manage_service_ensure,
     enable   => $manage_service_enable,
     provider => base,

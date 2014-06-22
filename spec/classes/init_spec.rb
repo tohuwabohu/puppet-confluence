@@ -2,17 +2,20 @@ require 'spec_helper'
 
 describe 'confluence' do
   let(:title) { 'confluence' }
+  let(:archive_name) { 'atlassian-confluence-5.3.1' }
   let(:server_xml) { '/opt/atlassian-confluence-5.3.1/conf/server.xml' }
   let(:setenv_sh) { '/opt/atlassian-confluence-5.3.1/bin/setenv.sh' }
+  let(:user_sh) { '/opt/atlassian-confluence-5.3.1/bin/user.sh' }
 
   describe 'by default' do
     let(:params) { {} }
 
-    specify { should contain_archive('atlassian-confluence-5.3.1') }
+    specify { should contain_archive(archive_name) }
     specify { should contain_service('confluence').with_ensure('running').with_enable(true) }
     specify { should contain_service('confluence').with_require('Package[sun-java6-jdk]') }
     specify { should contain_file(server_xml).with_content(/protocol="AJP\/1.3"/) }
     specify { should contain_file(server_xml).with_content(/port="8009"/) }
+    specify { should contain_file(user_sh) }
   end
 
   describe 'should not accept empty hostname' do
@@ -37,10 +40,103 @@ describe 'confluence' do
     end
   end
 
-  describe 'with disable => true' do
-    let(:params) { {:disable => true} }
+  describe 'should accept empty md5sum' do
+    let(:params) { {:md5sum => ''} }
+
+    specify { should contain_archive(archive_name).with_digest_string('') }
+  end
+
+  describe 'with custom md5sum' do
+    let(:params) { {:md5sum => 'beef'} }
+
+    specify { should contain_archive(archive_name).with_digest_string('beef') }
+  end
+
+  describe 'should not accept empty service_disabled' do
+    let(:params) { {:service_disabled => ''} }
+
+    specify do
+      expect { should contain_class('confluence') }.to raise_error(Puppet::Error, /service_disabled/)
+    end
+  end
+
+  describe 'should not accept invalid service_disabled' do
+    let(:params) { {:service_disabled => 'invalid'} }
+
+    specify do
+      expect { should contain_class('confluence') }.to raise_error(Puppet::Error, /service_disabled/)
+    end
+  end
+
+  describe 'with service_disabled => true' do
+    let(:params) { {:service_disabled => true} }
 
     specify { should contain_service('confluence').with_ensure('stopped').with_enable(false) }
+  end
+
+  describe 'with service_disabled => false' do
+    let(:params) { {:service_disabled => false} }
+
+    specify { should contain_service('confluence').with_ensure('running').with_enable(true) }
+  end
+
+  describe 'should not accept empty service_name' do
+    let(:params) { {:service_name => ''} }
+
+    specify do
+      expect { should contain_class('confluence') }.to raise_error(Puppet::Error, /service_name/)
+    end
+  end
+
+  describe 'with custom service_name' do
+    let(:params) { {:service_name => 'jdoe'} }
+
+    specify { should contain_user('jdoe') }
+    specify { should contain_group('jdoe') }
+    specify { should contain_service('jdoe') }
+    specify { should contain_file(user_sh).with_content(/^CONF_USER="jdoe"/) }
+  end
+
+  describe 'should not accept invalid service_uid' do
+    let(:params) { {:service_uid => 'invalid'} }
+
+    specify do
+      expect { should contain_class('confluence') }.to raise_error(Puppet::Error, /service_uid/)
+    end
+  end
+
+  describe 'should accept valid service_uid' do
+    let(:params) { {:service_uid => 500} }
+
+    specify { should contain_user('confluence').with_uid(500) }
+  end
+
+  describe 'should accept empty service_uid' do
+    let(:params) { {:service_gid => ''} }
+
+    specify { should contain_user('confluence').with_uid('') }
+  end
+
+  describe 'should not accept invalid service_gid' do
+    let(:params) { {:service_gid => 'invalid'} }
+
+    specify do
+      expect { should contain_class('confluence') }.to raise_error(Puppet::Error, /service_gid/)
+    end
+  end
+
+  describe 'should accept valid service_gid' do
+    let(:params) { {:service_gid => 500} }
+
+    specify { should contain_user('confluence').with_gid('confluence') }
+    specify { should contain_group('confluence').with_gid(500) }
+  end
+
+  describe 'should accept empty service_gid' do
+    let(:params) { {:service_gid => ''} }
+
+    specify { should contain_user('confluence').with_gid('confluence') }
+    specify { should contain_group('confluence').with_gid('') }
   end
 
   describe 'with default HTTP address and port' do

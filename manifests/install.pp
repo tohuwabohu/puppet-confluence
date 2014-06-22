@@ -19,6 +19,7 @@ class confluence::install inherits confluence {
   $application_dir = "${confluence::install_dir}/${archive_name}"
   $current_dir = "${confluence::install_dir}/atlassian-confluence-current"
   $data_dir = $confluence::data_dir
+  $backup_dir = "${data_dir}/backups"
 
   $service_name = $confluence::service_name
   $pid_directory = "${confluence::params::run_dir}/${service_name}"
@@ -105,7 +106,7 @@ class confluence::install inherits confluence {
     mode   => '0644',
   }
 
-  file { "${data_dir}/backups":
+  file { $backup_dir:
     ensure => directory,
     owner  => $service_name,
     group  => $service_name,
@@ -114,10 +115,10 @@ class confluence::install inherits confluence {
 
   file { '/etc/cron.daily/purge-old-confluence-backups':
     ensure  => $cron_ensure,
-    content => "#!/bin/bash\n/usr/bin/find ${data_dir}/backups/ -name \"*.zip\" -type f -mtime +${confluence::purge_backups_after} -delete",
+    content => "#!/bin/bash\n/usr/bin/find ${backup_dir}/ -name \"*.zip\" -type f -mtime +${confluence::purge_backups_after} -delete",
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    require => File["${data_dir}/backups"],
+    require => File[$backup_dir],
   }
 }

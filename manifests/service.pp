@@ -21,7 +21,7 @@ class confluence::service inherits confluence {
   }
   $service_script = $confluence::params::service_script
 
-  service { $service_name:
+  service { $confluence::service_name:
     ensure   => $service_ensure,
     enable   => $service_enable,
     provider => base,

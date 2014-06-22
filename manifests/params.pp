@@ -39,6 +39,10 @@ class confluence::params {
     default => '/data/confluence',
   }
 
+  $run_dir = $::osfamily ? {
+    default => '/var/run'
+  }
+
   $service_name = 'confluence'
   $service_uid = undef
   $service_gid = undef

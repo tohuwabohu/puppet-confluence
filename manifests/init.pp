@@ -110,9 +110,6 @@ class confluence (
   }
 
   $application_dir = "${install_dir}/atlassian-confluence-${confluence::version}"
-  $pid_directory = $::operatingsystem ? {
-    default => "/var/run/${service_name}",
-  }
 
   class { 'confluence::install': } ->
   class { 'confluence::config': } ~>

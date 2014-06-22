@@ -16,7 +16,8 @@ class confluence::install inherits confluence {
   $md5sum = $confluence::md5sum
   $version = $confluence::version
   $service_name = $confluence::service_name
-  $pid_file = "${confluence::pid_directory}/${service_name}.pid"
+  $pid_directory = "${confluence::params::run_dir}/${service_name}"
+  $pid_file = "${pid_directory}/${service_name}.pid"
   $working_dirs = [
     "${application_dir}/logs",
     "${application_dir}/temp",

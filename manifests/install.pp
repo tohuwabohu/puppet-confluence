@@ -82,6 +82,7 @@ class confluence::install inherits confluence {
   file { $current_dir:
     ensure => link,
     target => $application_dir,
+    notify => Service[$service_name],
   }
 
   file { $working_dirs:

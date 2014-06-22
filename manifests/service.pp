@@ -12,8 +12,8 @@
 class confluence::service inherits confluence {
 
   $service_ensure = $confluence::service_disabled ? {
-    true    => 'stopped',
-    default => 'running',
+    true    => stopped,
+    default => running,
   }
   $service_enable = $confluence::service_disabled ? {
     true    => false,

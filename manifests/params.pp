@@ -35,8 +35,8 @@ class confluence::params {
     default => '/opt',
   }
 
-  $data_dir = $::operatingsystem ? {
-    default => '/data/confluence',
+  $data_dir = $::osfamily ? {
+    default => '/var/lib/confluence',
   }
 
   $run_dir = $::osfamily ? {

@@ -57,30 +57,30 @@
 # Copyright 2014 Martin Meinhold, unless otherwise noted.
 #
 class confluence (
-  $hostname               = params_lookup('hostname'),
-  $version                = params_lookup('version'),
+  $hostname               = $confluence::params::hostname,
+  $version                = $confluence::params::version,
 
-  $service_name           = params_lookup('service_name'),
-  $service_uid            = params_lookup('service_uid'),
-  $service_gid            = params_lookup('service_gid'),
-  $service_disabled       = params_lookup('service_disabled'),
+  $service_name           = $confluence::params::service_name,
+  $service_uid            = $confluence::params::service_uid,
+  $service_gid            = $confluence::params::service_gid,
+  $service_disabled       = $confluence::params::service_disabled,
 
-  $md5sum                 = params_lookup('md5sum'),
-  $package_dir            = params_lookup('package_dir'),
-  $install_dir            = params_lookup('install_dir'),
-  $data_dir               = params_lookup('data_dir'),
+  $md5sum                 = $confluence::params::md5sum,
+  $package_dir            = $confluence::params::package_dir,
+  $install_dir            = $confluence::params::install_dir,
+  $data_dir               = $confluence::params::data_dir,
 
-  $http_address           = params_lookup('http_address'),
-  $http_port              = params_lookup('http_port'),
-  $ajp_address            = params_lookup('ajp_address'),
-  $ajp_port               = params_lookup('ajp_port'),
-  $protocols              = params_lookup('protocols'),
+  $http_address           = $confluence::params::http_address,
+  $http_port              = $confluence::params::http_port,
+  $ajp_address            = $confluence::params::ajp_address,
+  $ajp_port               = $confluence::params::ajp_port,
+  $protocols              = $confluence::params::protocols,
 
-  $java_opts              = params_lookup('java_opts'),
-  $java_package           = params_lookup('java_package'),
-  $plugin_startup_timeout = params_lookup('plugin_startup_timeout'),
+  $java_opts              = $confluence::params::java_opts,
+  $java_package           = $confluence::params::java_package,
+  $plugin_startup_timeout = $confluence::params::plugin_startup_timeout,
 
-  $purge_backups_after    = params_lookup('purge_backups_after')
+  $purge_backups_after    = $confluence::params::purge_backups_after
 ) inherits confluence::params {
 
   if empty($hostname) {

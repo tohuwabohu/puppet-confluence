@@ -7,6 +7,5 @@ project_page 'https://github.com/tohuwabohu/tohuwabohu-confluence'
 summary 'Puppet module for Atlassian Confluence'
 description 'This module installs and manages Atlassian Confluence.'
 
-dependency 'example42/puppi', '2.x'
 dependency 'gini/archive', '0.2.x'
 dependency 'puppetlabs/stdlib', '4.x'

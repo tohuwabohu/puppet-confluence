@@ -2,7 +2,7 @@
 
 ##Overview
 
-Puppet module to install and manage Atlassian Confluence (up to 5.6).
+Puppet module to install and manage Atlassian Confluence (5.6 and above).
 
 ##Usage
 

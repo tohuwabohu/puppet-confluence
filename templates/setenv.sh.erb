@@ -2,10 +2,9 @@
     jvm_args = scope.lookupvar('confluence::java_opts')
     jvm_args += " -Datlassian.plugins.enable.wait=#{@plugin_startup_timeout}" if @plugin_startup_timeout
 -%>
-JAVA_OPTS="<%= jvm_args %> $JAVA_OPTS -Djava.awt.headless=true"
-export JAVA_OPTS
+# See the CATALINA_OPTS below for tuning the JVM arguments used to start Confluence.
 
-echo "If you encounter issues starting up Confluence Standalone, please see the Installation guide at http://confluence.atlassian.com/display/DOC/Confluence+Installation+Guide"
+echo "If you encounter issues starting up Confluence, please see the Installation guide at http://confluence.atlassian.com/display/DOC/Confluence+Installation+Guide"
 
 # set the location of the pid file
 if [ -z "$CATALINA_PID" ] ; then
@@ -39,4 +38,12 @@ cd $PUSHED_DIR
 
 echo ""
 echo "Server startup logs are located in $LOGBASEABS/logs/catalina.out"
+
+# Set the JVM arguments used to start Confluence. For a description of the options, see
+# http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html
+CATALINA_OPTS="$CATALINA_OPTS <%= jvm_args %> -XX:+UseG1GC"
+CATALINA_OPTS="$CATALINA_OPTS -Djava.awt.headless=true"
+CATALINA_OPTS="$CATALINA_OPTS -Xloggc:$LOGBASEABS/logs/gc-`date +%F_%T`.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=2M"
+CATALINA_OPTS="$CATALINA_OPTS -XX:-PrintGCDetails -XX:+PrintGCTimeStamps -XX:-PrintTenuringDistribution"
+export CATALINA_OPTS
 

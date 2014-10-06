@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'confluence' do
   let(:title) { 'confluence' }
-  let(:archive_name) { 'atlassian-confluence-5.3.1' }
+  let(:archive_name) { 'atlassian-confluence-5.6.3' }
   let(:application_dir) { "/opt/#{archive_name}" }
   let(:cron_script) { '/etc/cron.daily/purge-old-confluence-backups' }
   let(:server_xml) { '/opt/atlassian-confluence-current/conf/server.xml' }

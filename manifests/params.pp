@@ -12,8 +12,8 @@
 class confluence::params {
   $hostname = $::fqdn
 
-  $md5sum = '7959324f3be5c9076dfaa3da59d1349b'
-  $version = '5.3.1'
+  $md5sum = '323f8d47944d4c53fc57a5abc4ebeaf5'
+  $version = '5.6.3'
 
   $http_address = '127.0.0.1'
   $http_port = 8090
@@ -21,7 +21,7 @@ class confluence::params {
   $ajp_port = 8009
   $protocols = ['http', 'ajp']
 
-  $java_opts = '-Xms256m -Xmx512m -XX:MaxPermSize=256m'
+  $java_opts = '-Xms1024m -Xmx1024m -XX:MaxPermSize=256m'
   $java_package = $::operatingsystem ? {
     default => 'sun-java6-jdk',
   }

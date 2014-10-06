@@ -16,7 +16,7 @@ The module has been tested on the following operating systems. Testing and patch
 
 * Debian Linux 7.0 (Wheezy)
 
-[![Build Status](https://travis-ci.org/tohuwabohu/tohuwabohu-confluence.png?branch=master)](https://travis-ci.org/tohuwabohu/tohuwabohu-confluence)
+[![Build Status](https://travis-ci.org/tohuwabohu/puppet-confluence.png?branch=master)](https://travis-ci.org/tohuwabohu/puppet-confluence)
 
 ##Contributing
 

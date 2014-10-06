@@ -1,0 +1,27 @@
+{
+    "name": "tohuwabohu-confluence",
+    "version": "1.0.0",
+    "author": "Martin Meinhold",
+    "license": "Apache License, Version 2.0",
+    "summary": "Puppet module for Atlassian Confluence",
+    "source": "https://github.com/tohuwabohu/puppet-confluence.git",
+    "project_page": "https://github.com/tohuwabohu/puppet-confluence",
+    "issues_url": "https://github.com/tohuwabohu/puppet-confluence/issues",
+    "tags": ["confluence", "wiki", "atlassian"],
+    "operatingsystem_support": [
+        {
+            "operatingsystem": "Debian",
+            "operatingsystemrelease": [ "7.0" ]
+        }
+    ],
+    "dependencies": [
+        {
+            "name": "gini/archive",
+            "version_requirement": "0.2.x"
+        },
+        {
+            "name": "puppetlabs/stdlib",
+            "version_requirement": "4.x"
+        }
+    ]
+}

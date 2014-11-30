@@ -23,7 +23,6 @@ class confluence::install inherits confluence {
 
   $service_name = $confluence::service_name
   $pid_directory = "${confluence::params::run_dir}/${service_name}"
-  $pid_file = "${pid_directory}/${service_name}.pid"
   $working_dirs = [
     "${application_dir}/logs",
     "${application_dir}/temp",
@@ -98,13 +97,6 @@ class confluence::install inherits confluence {
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-  }
-
-  file { $pid_directory:
-    ensure => directory,
-    owner  => $service_name,
-    group  => $service_name,
-    mode   => '0644',
   }
 
   file { $backup_dir:

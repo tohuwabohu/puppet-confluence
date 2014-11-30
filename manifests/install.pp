@@ -58,13 +58,14 @@ class confluence::install inherits confluence {
   }
 
   archive { $archive_name:
-    ensure        => present,
-    digest_string => $archive_md5sum,
-    url           => $archive_url,
-    target        => $confluence::install_dir,
-    src_target    => $confluence::package_dir,
-    timeout       => 600,
-    require       => [
+    ensure           => present,
+    digest_string    => $archive_md5sum,
+    url              => $archive_url,
+    target           => $confluence::install_dir,
+    src_target       => $confluence::package_dir,
+    follow_redirects => true,
+    timeout          => 600,
+    require          => [
       File[$confluence::install_dir],
       File[$confluence::package_dir],
     ],

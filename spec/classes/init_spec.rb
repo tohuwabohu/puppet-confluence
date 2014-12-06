@@ -24,7 +24,7 @@ describe 'confluence' do
     specify { should contain_file(server_xml).with_content(/protocol="AJP\/1.3"/) }
     specify { should contain_file(server_xml).with_content(/port="8009"/) }
     specify { should contain_file(setenv_sh).without_content(/-Datlassian.plugins.enable.wait=/) }
-    specify { should contain_file(user_sh).with_content(/^CONF_USER="confluence"/) }
+    specify { should contain_augeas(user_sh).with_changes(/CONF_USER "confluence"/) }
     specify { should contain_file(service_script).with_content(/^PIDFILE=\/var\/run\/confluence\/confluence.pid$/) }
     specify { should contain_file(service_script).with_content(/^START_SCRIPT=\/opt\/atlassian-confluence-current\/bin\/start-confluence.sh$/) }
     specify { should contain_file(service_script).with_content(/^STOP_SCRIPT=\/opt\/atlassian-confluence-current\/bin\/stop-confluence.sh$/) }
@@ -107,7 +107,7 @@ describe 'confluence' do
     specify { should contain_user('jdoe') }
     specify { should contain_group('jdoe') }
     specify { should contain_service('jdoe') }
-    specify { should contain_file(user_sh).with_content(/^CONF_USER="jdoe"/) }
+    specify { should contain_augeas(user_sh).with_changes(/CONF_USER "jdoe"/) }
   end
 
   describe 'should not accept invalid service_uid' do

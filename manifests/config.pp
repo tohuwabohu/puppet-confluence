@@ -28,11 +28,10 @@ class confluence::config inherits confluence {
     mode    => '0755',
   }
 
-  file { "${current_dir}/bin/user.sh":
-    content => template('confluence/user.sh.erb'),
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
+  augeas { "${current_dir}/bin/user.sh":
+    lens    => 'Shellvars.lns',
+    incl    => "${current_dir}/bin/user.sh",
+    changes => "set CONF_USER \"${confluence::service_name}\"",
   }
 
   file { "${current_dir}/confluence/WEB-INF/classes/confluence-init.properties":

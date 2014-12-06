@@ -35,7 +35,7 @@ class confluence::config inherits confluence {
   }
 
   file { "${current_dir}/confluence/WEB-INF/classes/confluence-init.properties":
-    content => template('confluence/confluence-init.properties.erb'),
+    content => "confluence.home=${confluence::data_dir}\n",
     owner   => 'root',
     group   => 'root',
     mode    => '0644',

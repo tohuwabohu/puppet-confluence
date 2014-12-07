@@ -10,11 +10,11 @@
 # [*version*]
 #   Sets the version to be installed.
 #
-# [*md5*]
-#   Sets the MD5 checksum of the artifact.
-#
 # [*service_disabled*]
 #   Set to `true` to disable the service.
+#
+# [*md5sum*]
+#   Sets the MD5 checksum of the artifact.
 #
 # [*package_dir*]
 #   Sets the directory where the downloaded package is stored.

@@ -6,9 +6,34 @@ Puppet module to install and manage Atlassian Confluence (5.6 and above).
 
 ##Usage
 
+Just install Confluence with all default values:
+
 ```
 class { 'confluence': }
 ```
+
+Install a more recent version:
+
+```
+class { 'confluence':
+  version => '5.6.5',
+  md5sum  => '....',
+}
+```
+
+Tweak the database configuration:
+
+```
+class { 'confluence':
+  db_url      => 'jdbc:postgresql://localhost:5432/confluence',
+  db_driver   => 'org.postgresql.Driver',
+  db_dialect  => 'net.sf.hibernate.dialect.PostgreSQLDialect',
+  db_username => 'confluence',
+  db_password => $db_password,
+}
+```
+(note: the database configuration can only be managed once the initial setup has been completed and the relevant
+configuration file exists in the data directory).
 
 ##Limitations
 

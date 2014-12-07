@@ -25,6 +25,21 @@
 # [*data_dir*]
 #   Sets the application's home directory.
 #
+# [*db_url*]
+#   Sets the JDBC url used to talk to the database, e.g. `jdbc:postgresql://localhost:5432/confluence`.
+#
+# [*db_driver*]
+#   Sets the JDBC driver class, e.g. `org.postgresql.Driver`.
+#
+# [*db_dialect*]
+#   Sets the Hibernate dialect, e.g. `net.sf.hibernate.dialect.PostgreSQLDialect`.
+#
+# [*db_username*]
+#   Sets the database username.
+#
+# [*db_password*]
+#   Sets the database password used to authenticate to the database. Optional.
+#
 # [*jvm_xms*]
 #   Sets the minimal amount of memory to be used by the Java process.
 #
@@ -70,6 +85,12 @@ class confluence (
   $install_dir            = $confluence::params::install_dir,
   $data_dir               = $confluence::params::data_dir,
 
+  $db_url                 = $confluence::params::db_url,
+  $db_driver              = $confluence::params::db_driver,
+  $db_dialect             = $confluence::params::db_dialect,
+  $db_username            = $confluence::params::db_username,
+  $db_password            = $confluence::params::db_password,
+
   $http_address           = $confluence::params::http_address,
   $http_port              = $confluence::params::http_port,
   $ajp_address            = $confluence::params::ajp_address,
@@ -104,6 +125,18 @@ class confluence (
   validate_absolute_path($package_dir)
   validate_absolute_path($install_dir)
   validate_absolute_path($data_dir)
+  if empty($db_url) {
+    fail('Class[Confluence]: db_url must not be empty')
+  }
+  if empty($db_driver) {
+    fail('Class[Confluence]: db_driver must not be empty')
+  }
+  if empty($db_dialect) {
+    fail('Class[Confluence]: db_dialect must not be empty')
+  }
+  if empty($db_username) {
+    fail('Class[Confluence]: db_username must not be empty')
+  }
   validate_string($http_address)
   validate_string($ajp_address)
   validate_array($protocols)

@@ -10,6 +10,7 @@ describe 'confluence' do
   let(:setenv_sh) { '/opt/atlassian-confluence-current/bin/setenv.sh' }
   let(:setenv2_sh) { '/opt/atlassian-confluence-current/bin/setenv2.sh' }
   let(:user_sh) { '/opt/atlassian-confluence-current/bin/user.sh' }
+  let(:config_file) { '/var/lib/confluence/confluence.cfg.xml' }
 
   describe 'by default' do
     let(:params) { {} }
@@ -27,6 +28,12 @@ describe 'confluence' do
     specify { should contain_file_line(setenv_sh).with_line(/setenv2.sh/) }
     specify { should contain_file(setenv2_sh).without_content(/-Datlassian.plugins.enable.wait=/) }
     specify { should contain_augeas(user_sh).with_changes(/CONF_USER "confluence"/) }
+    specify { should contain_augeas(config_file) }
+    specify { should contain_augeas(config_file).with_changes(/jdbc:postgresql:\/\/localhost:5432\/confluence/) }
+    specify { should contain_augeas(config_file).with_changes(/org.postgresql.Driver/) }
+    specify { should contain_augeas(config_file).with_changes(/net.sf.hibernate.dialect.PostgreSQLDialect/) }
+    specify { should contain_augeas(config_file).with_changes(/confluence/) }
+    specify { should contain_augeas(config_file).with_changes(/secret/) }
     specify { should contain_file(service_script).with_content(/^PIDFILE=\/var\/run\/confluence\/confluence.pid$/) }
     specify { should contain_file(service_script).with_content(/^START_SCRIPT=\/opt\/atlassian-confluence-current\/bin\/start-confluence.sh$/) }
     specify { should contain_file(service_script).with_content(/^STOP_SCRIPT=\/opt\/atlassian-confluence-current\/bin\/stop-confluence.sh$/) }
@@ -152,6 +159,44 @@ describe 'confluence' do
 
     specify { should contain_user('confluence').with_gid('confluence') }
     specify { should contain_group('confluence').with_gid('') }
+  end
+
+  describe 'should not accept empty db_url' do
+    let(:params) { {:db_url => ''} }
+
+    specify do
+      expect { should contain_class('confluence') }.to raise_error(Puppet::Error, /db_url/)
+    end
+  end
+
+  describe 'should not accept empty db_driver' do
+    let(:params) { {:db_driver => ''} }
+
+    specify do
+      expect { should contain_class('confluence') }.to raise_error(Puppet::Error, /db_driver/)
+    end
+  end
+
+  describe 'should not accept empty db_dialect' do
+    let(:params) { {:db_dialect => ''} }
+
+    specify do
+      expect { should contain_class('confluence') }.to raise_error(Puppet::Error, /db_dialect/)
+    end
+  end
+
+  describe 'should not accept empty db_username' do
+    let(:params) { {:db_username => ''} }
+
+    specify do
+      expect { should contain_class('confluence') }.to raise_error(Puppet::Error, /db_username/)
+    end
+  end
+
+  describe 'should accept empty db_password' do
+    let(:params) { {:db_password => ''} }
+
+    specify { should contain_augeas(config_file).with_changes(/""/) }
   end
 
   describe 'with default HTTP address and port' do

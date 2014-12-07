@@ -15,6 +15,12 @@ class confluence::params {
   $md5sum = '323f8d47944d4c53fc57a5abc4ebeaf5'
   $version = '5.6.3'
 
+  $db_url = 'jdbc:postgresql://localhost:5432/confluence'
+  $db_driver = 'org.postgresql.Driver'
+  $db_dialect = 'net.sf.hibernate.dialect.PostgreSQLDialect'
+  $db_username = 'confluence'
+  $db_password = 'secret'
+
   $http_address = '127.0.0.1'
   $http_port = 8090
   $ajp_address = '127.0.0.1'

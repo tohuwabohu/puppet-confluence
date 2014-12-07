@@ -61,6 +61,6 @@ class confluence::config inherits confluence {
     ],
     # Only update the configuration when the database configuration actually exists. It is created as part of the
     # initial setup and hence doesn't existing unless the installation is completed.
-    onlyif => 'match confluence-configuration/properties/property[#attribute/name = \'hibernate.connection.url\'] size == 1',
+    onlyif  => 'match confluence-configuration/properties/property[#attribute/name = \'hibernate.connection.url\'] size == 1',
   }
 }

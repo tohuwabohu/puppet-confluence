@@ -1,0 +1,9 @@
+<%-
+    jvm_args = scope.lookupvar('confluence::java_opts')
+    jvm_args += " -Datlassian.plugins.enable.wait=#{@plugin_startup_timeout}" if @plugin_startup_timeout
+-%>
+#
+# This file is managed by Puppet
+#
+
+export CATALINA_OPTS="$CATALINA_OPTS <%= jvm_args %>"

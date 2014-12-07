@@ -8,6 +8,7 @@ describe 'confluence' do
   let(:server_xml) { '/opt/atlassian-confluence-current/conf/server.xml' }
   let(:service_script) { '/etc/init.d/confluence' }
   let(:setenv_sh) { '/opt/atlassian-confluence-current/bin/setenv.sh' }
+  let(:setenv2_sh) { '/opt/atlassian-confluence-current/bin/setenv2.sh' }
   let(:user_sh) { '/opt/atlassian-confluence-current/bin/user.sh' }
 
   describe 'by default' do
@@ -23,7 +24,8 @@ describe 'confluence' do
     specify { should contain_file(cron_script).with_ensure('absent') }
     specify { should contain_file(server_xml).with_content(/protocol="AJP\/1.3"/) }
     specify { should contain_file(server_xml).with_content(/port="8009"/) }
-    specify { should contain_file(setenv_sh).without_content(/-Datlassian.plugins.enable.wait=/) }
+    specify { should contain_file_line(setenv_sh).with_line(/setenv2.sh/) }
+    specify { should contain_file(setenv2_sh).without_content(/-Datlassian.plugins.enable.wait=/) }
     specify { should contain_augeas(user_sh).with_changes(/CONF_USER "confluence"/) }
     specify { should contain_file(service_script).with_content(/^PIDFILE=\/var\/run\/confluence\/confluence.pid$/) }
     specify { should contain_file(service_script).with_content(/^START_SCRIPT=\/opt\/atlassian-confluence-current\/bin\/start-confluence.sh$/) }
@@ -210,7 +212,7 @@ describe 'confluence' do
   describe 'with custom java opts' do
     let(:params) { {:java_opts => '-Xms512m -Xmx1024m'} }
 
-    specify { should contain_file(setenv_sh).with_content(/-Xms512m -Xmx1024m/) }
+    specify { should contain_file(setenv2_sh).with_content(/-Xms512m -Xmx1024m/) }
   end
 
   describe 'should not accept empty java opts' do

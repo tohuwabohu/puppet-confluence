@@ -1,4 +1,4 @@
-source ENV['GEM_SOURCE'] || "https://rubygems.org"
+source ENV['GEM_SOURCE'] || 'https://rubygems.org'
 
 group :development, :test do
   gem 'rake', '~> 10.1.1'
@@ -9,7 +9,7 @@ group :development, :test do
   gem 'puppet-lint', '~> 0.3.2'
 end
 
-group :development, :beaker do
+group :system_tests do
   gem 'beaker', '~> 1.19.1'
   gem 'beaker-rspec', '~> 3.0.0'
   gem 'serverspec', '~> 1.7.0'

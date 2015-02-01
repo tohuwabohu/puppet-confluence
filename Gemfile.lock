@@ -108,20 +108,30 @@ GEM
       facter (> 1.6, < 3)
       hiera (~> 1.0)
       json_pure
+    puppet-blacksmith (3.1.1)
+      puppet (>= 2.7.16)
+      rest-client
     puppet-lint (0.3.2)
     puppet-syntax (1.1.1)
       puppet (>= 2.7.0)
       rake
-    puppetlabs_spec_helper (0.4.1)
-      mocha (>= 0.10.5)
+    puppetlabs_spec_helper (0.8.2)
+      mocha
+      puppet-lint
+      puppet-syntax
       rake
-      rspec (>= 2.9.0)
-      rspec-puppet (>= 0.1.1)
+      rspec
+      rspec-puppet
     rake (10.1.1)
     rbvmomi (1.8.1)
       builder
       nokogiri (>= 1.4.1)
       trollop
+    rdoc (4.2.0)
+      json (~> 1.4)
+    rest-client (1.6.8)
+      mime-types (~> 1.16)
+      rdoc (>= 2.4.2)
     retriable (1.4.1)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
@@ -158,11 +168,14 @@ PLATFORMS
 DEPENDENCIES
   beaker (~> 1.19.1)
   beaker-rspec (~> 3.0.0)
+  mime-types (< 2.0)
   puppet (~> 3.7.3)
+  puppet-blacksmith (~> 3.1.1)
   puppet-lint (~> 0.3.2)
   puppet-syntax (~> 1.1.1)
-  puppetlabs_spec_helper (~> 0.4.1)
+  puppetlabs_spec_helper (~> 0.8.2)
   rake (~> 10.1.1)
+  rest-client (~> 1.6.7)
   rspec (~> 2.14.1)
   rspec-puppet (~> 1.0.1)
   serverspec (~> 1.7.0)

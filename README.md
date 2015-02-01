@@ -50,3 +50,16 @@ The module has been tested on the following operating systems. Testing and patch
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+###Development
+
+This project uses rspec-puppet and beaker to ensure the module works as expected and to prevent regressions.
+
+```
+gem install bundler
+bundle install --path vendor
+
+bundle exec rake spec
+bundle exec rake beaker
+```
+(note: use `RS_PROVISION=no` and `RS_DESTROY=no` to control beaker default behaviour)

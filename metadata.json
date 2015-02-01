@@ -14,6 +14,12 @@
             "operatingsystemrelease": [ "7.0" ]
         }
     ],
+    "requirements": [
+        {
+            "name": "puppet",
+            "version_requirement": "3.x"
+        }
+    ],
     "dependencies": [
         {
             "name": "camptocamp/archive",

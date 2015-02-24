@@ -14,7 +14,7 @@ class confluence::install inherits confluence {
   $version = $confluence::version
   $archive_name = "atlassian-confluence-${version}"
   $archive_md5sum = $confluence::md5sum
-  $archive_url = "http://www.atlassian.com/software/confluence/downloads/binary/${archive_name}.tar.gz"
+  $archive_url = "http://downloads.atlassian.com/software/confluence/downloads/${archive_name}.tar.gz"
 
   $application_dir = "${confluence::install_dir}/${archive_name}"
   $current_dir = "${confluence::install_dir}/atlassian-confluence-current"

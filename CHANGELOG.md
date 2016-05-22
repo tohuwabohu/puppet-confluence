@@ -1,3 +1,14 @@
+##2016-XX-YY - Release 1.1.0
+###Summary
+
+Add systemd service configuration. Not enabled by default but can be turned on with
+
+```
+class { 'confluence':
+  service_systemd => true,
+}
+```
+
 ##2015-02-24 - Release 1.0.1
 ###Summary
 

@@ -92,12 +92,29 @@ class confluence::install inherits confluence {
     mode   => '0644',
   }
 
-  file { $confluence::params::service_script:
-    ensure  => file,
-    content => template('confluence/confluence.erb'),
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
+  if $confluence::service_systemd {
+    file { '/lib/systemd/system/confluence.service':
+      ensure  => file,
+      content => template('confluence/confluence.service.erb'),
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+    }
+  } else {
+    file { $confluence::params::service_script:
+      ensure  => file,
+      content => template('confluence/confluence.erb'),
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+    }
+  }
+
+  file { $pid_directory:
+    ensure => directory,
+    owner  => $service_name,
+    group  => $service_name,
+    mode   => '0644',
   }
 
   file { $backup_dir:

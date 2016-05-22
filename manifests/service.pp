@@ -21,14 +21,23 @@ class confluence::service inherits confluence {
   }
   $service_script = $confluence::params::service_script
 
-  service { $confluence::service_name:
-    ensure   => $service_ensure,
-    enable   => $service_enable,
-    provider => base,
-    start    => "${service_script} start",
-    restart  => "${service_script} restart",
-    stop     => "${service_script} stop",
-    status   => "${service_script} status",
-    require  => Package[$confluence::java_package],
+  if $confluence::service_systemd {
+    service { $confluence::service_name:
+      ensure   => $service_ensure,
+      enable   => $service_enable,
+      provider => systemd,
+      require  => Package[$confluence::java_package],
+    }
+  } else {
+    service { $confluence::service_name:
+      ensure   => $service_ensure,
+      enable   => $service_enable,
+      provider => base,
+      start    => "${service_script} start",
+      restart  => "${service_script} restart",
+      stop     => "${service_script} stop",
+      status   => "${service_script} status",
+      require  => Package[$confluence::java_package],
+    }
   }
 }

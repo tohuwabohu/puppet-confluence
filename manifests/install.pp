@@ -92,7 +92,7 @@ class confluence::install inherits confluence {
     mode   => '0644',
   }
 
-  if $service_systemd {
+  if $confluence::service_systemd {
     file { '/lib/systemd/system/confluence.service':
       ensure  => file,
       content => template('confluence/confluence.service.erb'),
@@ -101,7 +101,7 @@ class confluence::install inherits confluence {
       mode    => '0644',
     }
   } else {
-    file { '/etc/init.d/confluence':
+    file { $confluence::params::service_script:
       ensure  => file,
       content => template('confluence/confluence.erb'),
       owner   => 'root',

@@ -55,7 +55,5 @@ class confluence::params {
   $service_uid = undef
   $service_gid = undef
   $service_disabled = false
-  $service_script = $::osfamily ? {
-    default => '/etc/init.d/confluence',
-  }
+  $service_systemd = false
 }

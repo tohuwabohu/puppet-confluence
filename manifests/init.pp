@@ -79,6 +79,7 @@ class confluence (
   $service_uid            = $confluence::params::service_uid,
   $service_gid            = $confluence::params::service_gid,
   $service_disabled       = $confluence::params::service_disabled,
+  $service_systemd        = $confluence::params::service_systemd,
 
   $md5sum                 = $confluence::params::md5sum,
   $package_dir            = $confluence::params::package_dir,
